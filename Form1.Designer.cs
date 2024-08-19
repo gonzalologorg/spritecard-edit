@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
 			previewImage = new PictureBox();
 			targetPath = new TextBox();
 			label1 = new Label();
@@ -223,6 +224,7 @@
 			Controls.Add(label1);
 			Controls.Add(targetPath);
 			Controls.Add(previewImage);
+			Icon = (Icon)resources.GetObject("$this.Icon");
 			Margin = new Padding(2);
 			MaximizeBox = false;
 			MaximumSize = new Size(346, 332);

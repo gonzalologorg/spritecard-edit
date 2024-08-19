@@ -25,7 +25,16 @@ namespace MKSCreator
             {
                 targetPath.Text = lastPath;
             }
-        }
+
+			string[] args = Environment.GetCommandLineArgs();
+            if (args.Length > 1)
+            {
+				Properties.Settings.Default.lastImage = args[1];
+				Properties.Settings.Default.Save();
+
+				previewImage.ImageLocation = args[1];
+			}
+		}
 
         void Form1_DragEnter(object sender, DragEventArgs e)
         {
