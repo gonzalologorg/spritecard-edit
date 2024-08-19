@@ -195,7 +195,7 @@ namespace MKSCreator
             {
                 sdkpathLabel.Text = "SDK Path (OK)";
             }
-            sdkpathLabel.TextAlign = ContentAlignment.TopRight;
+            sdkpathLabel.TextAlign = ContentAlignment.MiddleRight;
         }
 
         private void previewImage_DragDrop(object sender, DragEventArgs e)
@@ -207,19 +207,19 @@ namespace MKSCreator
         {
             float cols = Int32.Parse(sizex.Text);
             float rows = Int32.Parse(sizey.Text);
-            int colSize = (int)Math.Floor(300 / cols);
-            int rowSize = (int)Math.Floor(300 / rows);
+            int colSize = (int)Math.Floor(200 / cols);
+            int rowSize = (int)Math.Floor(200 / rows);
 
             using (Pen pen = new Pen(Color.Black, 1))
-                e.Graphics.DrawRectangle(pen, 0, 0, 299, 299);
+                e.Graphics.DrawRectangle(pen, 0, 0, 199, 199);
 
             for (int i = 1; i < cols; i++)
                 using (Pen pen = new Pen(Color.HotPink, 1))
-                    e.Graphics.DrawLine(pen, new Point(i * colSize, 0), new Point(i * colSize, 300));
+                    e.Graphics.DrawLine(pen, new Point(i * colSize, 0), new Point(i * colSize, 200));
 
             for (int i = 1; i < rows; i++)
                 using (Pen pen = new Pen(Color.HotPink, 1))
-                    e.Graphics.DrawLine(pen, new Point(0, i * rowSize), new Point(300, i * rowSize));
+                    e.Graphics.DrawLine(pen, new Point(0, i * rowSize), new Point(200, i * rowSize));
         }
 
         private void rowColChange(object sender, EventArgs e)

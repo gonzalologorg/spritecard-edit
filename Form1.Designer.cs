@@ -20,202 +20,225 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
+		#region Windows Form Designer generated code
 
-        /// <summary>
-        ///  Required method for Designer support - do not modify
-        ///  the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
-            previewImage = new PictureBox();
-            targetPath = new TextBox();
-            label1 = new Label();
-            sizex = new TextBox();
-            label2 = new Label();
-            kindseq = new RadioButton();
-            kindsingle = new RadioButton();
-            label3 = new Label();
-            label4 = new Label();
-            sizey = new TextBox();
-            exportButton = new Button();
-            sdkpathLabel = new LinkLabel();
-            additiveCheckbox = new CheckBox();
-            blendBox = new CheckBox();
-            ((System.ComponentModel.ISupportInitialize)previewImage).BeginInit();
-            SuspendLayout();
-            // 
-            // previewImage
-            // 
-            previewImage.Location = new Point(12, 90);
-            previewImage.Name = "previewImage";
-            previewImage.Size = new Size(300, 300);
-            previewImage.SizeMode = PictureBoxSizeMode.StretchImage;
-            previewImage.TabIndex = 0;
-            previewImage.TabStop = false;
-            previewImage.DragDrop += previewImage_DragDrop;
-            previewImage.Paint += previewImage_Paint;
-            // 
-            // targetPath
-            // 
-            targetPath.Location = new Point(12, 41);
-            targetPath.Name = "targetPath";
-            targetPath.Size = new Size(300, 31);
-            targetPath.TabIndex = 1;
-            targetPath.TextChanged += targetPath_TextChanged;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(12, 13);
-            label1.Name = "label1";
-            label1.Size = new Size(152, 25);
-            label1.TabIndex = 2;
-            label1.Text = "$basetexture Path";
-            // 
-            // sizex
-            // 
-            sizex.Location = new Point(318, 224);
-            sizex.Name = "sizex";
-            sizex.Size = new Size(136, 31);
-            sizex.TabIndex = 4;
-            sizex.Text = "2";
-            sizex.TextChanged += rowColChange;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(318, 90);
-            label2.Name = "label2";
-            label2.Size = new Size(49, 25);
-            label2.TabIndex = 5;
-            label2.Text = "Type";
-            // 
-            // kindseq
-            // 
-            kindseq.AutoSize = true;
-            kindseq.Checked = true;
-            kindseq.Location = new Point(318, 118);
-            kindseq.Name = "kindseq";
-            kindseq.Size = new Size(113, 29);
-            kindseq.TabIndex = 6;
-            kindseq.TabStop = true;
-            kindseq.Text = "Sequence";
-            kindseq.UseVisualStyleBackColor = true;
-            // 
-            // kindsingle
-            // 
-            kindsingle.AutoSize = true;
-            kindsingle.Location = new Point(318, 153);
-            kindsingle.Name = "kindsingle";
-            kindsingle.Size = new Size(85, 29);
-            kindsingle.TabIndex = 7;
-            kindsingle.Text = "Single";
-            kindsingle.UseVisualStyleBackColor = true;
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(318, 196);
-            label3.Name = "label3";
-            label3.Size = new Size(82, 25);
-            label3.TabIndex = 8;
-            label3.Text = "Columns";
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Location = new Point(318, 258);
-            label4.Name = "label4";
-            label4.Size = new Size(54, 25);
-            label4.TabIndex = 9;
-            label4.Text = "Rows";
-            // 
-            // sizey
-            // 
-            sizey.Location = new Point(318, 286);
-            sizey.Name = "sizey";
-            sizey.Size = new Size(136, 31);
-            sizey.TabIndex = 10;
-            sizey.Text = "2";
-            sizey.TextChanged += rowColChange;
-            // 
-            // exportButton
-            // 
-            exportButton.Location = new Point(12, 404);
-            exportButton.Name = "exportButton";
-            exportButton.Size = new Size(440, 34);
-            exportButton.TabIndex = 11;
-            exportButton.Text = "Export";
-            exportButton.UseVisualStyleBackColor = true;
-            exportButton.Click += button2_Click;
-            // 
-            // sdkpathLabel
-            // 
-            sdkpathLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            sdkpathLabel.AutoSize = true;
-            sdkpathLabel.Location = new Point(370, 13);
-            sdkpathLabel.Name = "sdkpathLabel";
-            sdkpathLabel.Size = new Size(84, 25);
-            sdkpathLabel.TabIndex = 12;
-            sdkpathLabel.TabStop = true;
-            sdkpathLabel.Text = "SDK Path";
-            sdkpathLabel.TextAlign = ContentAlignment.TopRight;
-            sdkpathLabel.LinkClicked += linkLabel1_LinkClicked;
-            // 
-            // additiveCheckbox
-            // 
-            additiveCheckbox.AutoSize = true;
-            additiveCheckbox.Location = new Point(318, 323);
-            additiveCheckbox.Name = "additiveCheckbox";
-            additiveCheckbox.Size = new Size(104, 29);
-            additiveCheckbox.TabIndex = 13;
-            additiveCheckbox.Text = "Additive";
-            additiveCheckbox.UseVisualStyleBackColor = true;
-            // 
-            // blendBox
-            // 
-            blendBox.AutoSize = true;
-            blendBox.Location = new Point(318, 358);
-            blendBox.Name = "blendBox";
-            blendBox.Size = new Size(144, 29);
-            blendBox.TabIndex = 14;
-            blendBox.Text = "Blend Frames";
-            blendBox.UseVisualStyleBackColor = true;
-            // 
-            // Form1
-            // 
-            AllowDrop = true;
-            AutoScaleDimensions = new SizeF(10F, 25F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(464, 452);
-            Controls.Add(blendBox);
-            Controls.Add(additiveCheckbox);
-            Controls.Add(sdkpathLabel);
-            Controls.Add(exportButton);
-            Controls.Add(sizey);
-            Controls.Add(label4);
-            Controls.Add(label3);
-            Controls.Add(kindsingle);
-            Controls.Add(kindseq);
-            Controls.Add(label2);
-            Controls.Add(sizex);
-            Controls.Add(label1);
-            Controls.Add(targetPath);
-            Controls.Add(previewImage);
-            MaximizeBox = false;
-            MinimizeBox = false;
-            Name = "Form1";
-            Text = "SpriteCard Edit";
-            Load += Form1_Load;
-            ((System.ComponentModel.ISupportInitialize)previewImage).EndInit();
-            ResumeLayout(false);
-            PerformLayout();
-        }
+		/// <summary>
+		///  Required method for Designer support - do not modify
+		///  the contents of this method with the code editor.
+		/// </summary>
+		private void InitializeComponent()
+		{
+			previewImage = new PictureBox();
+			targetPath = new TextBox();
+			label1 = new Label();
+			sizex = new TextBox();
+			label2 = new Label();
+			kindseq = new RadioButton();
+			kindsingle = new RadioButton();
+			label3 = new Label();
+			label4 = new Label();
+			sizey = new TextBox();
+			exportButton = new Button();
+			sdkpathLabel = new LinkLabel();
+			additiveCheckbox = new CheckBox();
+			blendBox = new CheckBox();
+			((System.ComponentModel.ISupportInitialize)previewImage).BeginInit();
+			SuspendLayout();
+			// 
+			// previewImage
+			// 
+			previewImage.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+			previewImage.Location = new Point(11, 54);
+			previewImage.Margin = new Padding(2);
+			previewImage.MaximumSize = new Size(200, 200);
+			previewImage.MinimumSize = new Size(200, 200);
+			previewImage.Name = "previewImage";
+			previewImage.Size = new Size(200, 200);
+			previewImage.SizeMode = PictureBoxSizeMode.StretchImage;
+			previewImage.TabIndex = 0;
+			previewImage.TabStop = false;
+			previewImage.DragDrop += previewImage_DragDrop;
+			previewImage.Paint += previewImage_Paint;
+			// 
+			// targetPath
+			// 
+			targetPath.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+			targetPath.Location = new Point(11, 25);
+			targetPath.Margin = new Padding(2);
+			targetPath.Name = "targetPath";
+			targetPath.Size = new Size(308, 23);
+			targetPath.TabIndex = 1;
+			targetPath.TextChanged += targetPath_TextChanged;
+			// 
+			// label1
+			// 
+			label1.AutoSize = true;
+			label1.Location = new Point(11, 8);
+			label1.Margin = new Padding(2, 0, 2, 0);
+			label1.Name = "label1";
+			label1.Size = new Size(101, 15);
+			label1.TabIndex = 2;
+			label1.Text = "$basetexture Path";
+			// 
+			// sizex
+			// 
+			sizex.Location = new Point(215, 135);
+			sizex.Margin = new Padding(2);
+			sizex.Name = "sizex";
+			sizex.RightToLeft = RightToLeft.Yes;
+			sizex.Size = new Size(96, 23);
+			sizex.TabIndex = 4;
+			sizex.Text = "2";
+			sizex.TextChanged += rowColChange;
+			// 
+			// label2
+			// 
+			label2.AutoSize = true;
+			label2.Location = new Point(215, 54);
+			label2.Margin = new Padding(2, 0, 2, 0);
+			label2.Name = "label2";
+			label2.Size = new Size(31, 15);
+			label2.TabIndex = 5;
+			label2.Text = "Type";
+			// 
+			// kindseq
+			// 
+			kindseq.AutoSize = true;
+			kindseq.Checked = true;
+			kindseq.Location = new Point(215, 71);
+			kindseq.Margin = new Padding(2);
+			kindseq.Name = "kindseq";
+			kindseq.Size = new Size(76, 19);
+			kindseq.TabIndex = 6;
+			kindseq.TabStop = true;
+			kindseq.Text = "Sequence";
+			kindseq.UseVisualStyleBackColor = true;
+			// 
+			// kindsingle
+			// 
+			kindsingle.AutoSize = true;
+			kindsingle.Location = new Point(215, 94);
+			kindsingle.Margin = new Padding(2);
+			kindsingle.Name = "kindsingle";
+			kindsingle.Size = new Size(57, 19);
+			kindsingle.TabIndex = 7;
+			kindsingle.Text = "Single";
+			kindsingle.UseVisualStyleBackColor = true;
+			// 
+			// label3
+			// 
+			label3.AutoSize = true;
+			label3.Location = new Point(215, 118);
+			label3.Margin = new Padding(2, 0, 2, 0);
+			label3.Name = "label3";
+			label3.Size = new Size(55, 15);
+			label3.TabIndex = 8;
+			label3.Text = "Columns";
+			// 
+			// label4
+			// 
+			label4.AutoSize = true;
+			label4.Location = new Point(215, 160);
+			label4.Margin = new Padding(2, 0, 2, 0);
+			label4.Name = "label4";
+			label4.Size = new Size(35, 15);
+			label4.TabIndex = 9;
+			label4.Text = "Rows";
+			// 
+			// sizey
+			// 
+			sizey.Location = new Point(215, 172);
+			sizey.Margin = new Padding(2);
+			sizey.Name = "sizey";
+			sizey.RightToLeft = RightToLeft.Yes;
+			sizey.Size = new Size(96, 23);
+			sizey.TabIndex = 10;
+			sizey.Text = "2";
+			sizey.TextChanged += rowColChange;
+			// 
+			// exportButton
+			// 
+			exportButton.Location = new Point(10, 258);
+			exportButton.Margin = new Padding(2);
+			exportButton.Name = "exportButton";
+			exportButton.Size = new Size(309, 26);
+			exportButton.TabIndex = 11;
+			exportButton.Text = "Export";
+			exportButton.UseVisualStyleBackColor = true;
+			exportButton.Click += button2_Click;
+			// 
+			// sdkpathLabel
+			// 
+			sdkpathLabel.AutoSize = true;
+			sdkpathLabel.Location = new Point(217, 8);
+			sdkpathLabel.Margin = new Padding(2, 0, 2, 0);
+			sdkpathLabel.Name = "sdkpathLabel";
+			sdkpathLabel.RightToLeft = RightToLeft.Yes;
+			sdkpathLabel.Size = new Size(55, 15);
+			sdkpathLabel.TabIndex = 12;
+			sdkpathLabel.TabStop = true;
+			sdkpathLabel.Text = "SDK Path";
+			sdkpathLabel.TextAlign = ContentAlignment.MiddleRight;
+			sdkpathLabel.LinkClicked += linkLabel1_LinkClicked;
+			// 
+			// additiveCheckbox
+			// 
+			additiveCheckbox.AutoSize = true;
+			additiveCheckbox.Location = new Point(215, 199);
+			additiveCheckbox.Margin = new Padding(2);
+			additiveCheckbox.Name = "additiveCheckbox";
+			additiveCheckbox.Size = new Size(70, 19);
+			additiveCheckbox.TabIndex = 13;
+			additiveCheckbox.Text = "Additive";
+			additiveCheckbox.UseVisualStyleBackColor = true;
+			// 
+			// blendBox
+			// 
+			blendBox.AutoSize = true;
+			blendBox.Location = new Point(215, 222);
+			blendBox.Margin = new Padding(2);
+			blendBox.Name = "blendBox";
+			blendBox.Size = new Size(97, 19);
+			blendBox.TabIndex = 14;
+			blendBox.Text = "Blend Frames";
+			blendBox.UseVisualStyleBackColor = true;
+			// 
+			// Form1
+			// 
+			AllowDrop = true;
+			AutoScaleMode = AutoScaleMode.None;
+			AutoSize = true;
+			ClientSize = new Size(330, 293);
+			Controls.Add(blendBox);
+			Controls.Add(additiveCheckbox);
+			Controls.Add(sdkpathLabel);
+			Controls.Add(exportButton);
+			Controls.Add(sizey);
+			Controls.Add(label4);
+			Controls.Add(label3);
+			Controls.Add(kindsingle);
+			Controls.Add(kindseq);
+			Controls.Add(label2);
+			Controls.Add(sizex);
+			Controls.Add(label1);
+			Controls.Add(targetPath);
+			Controls.Add(previewImage);
+			Margin = new Padding(2);
+			MaximizeBox = false;
+			MaximumSize = new Size(346, 332);
+			MinimizeBox = false;
+			MinimumSize = new Size(346, 332);
+			Name = "Form1";
+			Text = "SpriteCard Edit";
+			Load += Form1_Load;
+			((System.ComponentModel.ISupportInitialize)previewImage).EndInit();
+			ResumeLayout(false);
+			PerformLayout();
+		}
 
-        #endregion
+		#endregion
 
-        private PictureBox previewImage;
+		private PictureBox previewImage;
         private TextBox targetPath;
         private Label label1;
         private TextBox sizex;
