@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Drawing.Imaging;
+using System.Numerics;
 using TGASharpLib;
 
 namespace MKSCreator
@@ -82,7 +83,12 @@ namespace MKSCreator
             generateMKS(folder, fileNameNoExtension);
         }
 
-        void createWorkSpace(string folder, string vtf, string fileNoName)
+		private static int NearestPowerOf2(uint x)
+		{
+			return 1 << (sizeof(uint) * 8 - BitOperations.LeadingZeroCount(x - 1));
+		}
+
+		void createWorkSpace(string folder, string vtf, string fileNoName)
         {
             if (Directory.Exists(folder + "\\" + fileNoName))
                 Directory.Delete(folder + "\\" + fileNoName, true);
@@ -101,7 +107,7 @@ namespace MKSCreator
                 {
                     Bitmap newBitmap = new Bitmap(colSize, rowSize);
                     Graphics g = Graphics.FromImage(newBitmap);
-                    g.DrawImage(image, new Rectangle(0, 0, colSize, rowSize), new Rectangle(x * colSize, y * rowSize, colSize, rowSize), GraphicsUnit.Pixel);
+                    g.DrawImage(image, new Rectangle(0, 0, NearestPowerOf2((uint)colSize), NearestPowerOf2((uint)rowSize)), new Rectangle(x * colSize, y * rowSize, colSize, rowSize), GraphicsUnit.Pixel);
 
                     TGA tgaImage = TGA.FromBitmap(newBitmap);
                     tgaImage.Save(folder + "\\" + fileNoName + "\\" + frameId + ".tga");
@@ -119,7 +125,9 @@ namespace MKSCreator
                 "\t$basetexture \"" + targetPath.Text + "/" + fileNameNoExtension + "\"\n" +
                 "\t$translucent \"1\"\n" +
                 "\t$blendframes \"" + (blendBox.Checked ? "1" : "0") + "\"\n" +
-                "\t$additive \"" + (additiveCheckbox.Checked ? "1" : "0") + "\"\n}";
+				"\t$vertexcolor \"" + (coloralpha.Checked ? "1" : "0") + "\"\n" +
+				"\t$vertexalpha \"" + (coloralpha.Checked ? "1" : "0") + "\"\n" +
+				"\t$additive \"" + (additiveCheckbox.Checked ? "1" : "0") + "\"\n}";
 
             File.WriteAllText(vmt, vmtTemplate);
         }
@@ -149,14 +157,14 @@ namespace MKSCreator
             string mksPath = Properties.Settings.Default.mksPath;
             string vtexPath = mksPath.Replace("mksheet.exe", "vtex.exe");
             string batchFile = "@ECHO ON\n\"" + Properties.Settings.Default.mksPath + "\" \"" + filePath + fileName + "\"\n" +
-                "\"" + vtexPath + "\" -dontusegamedir -quiet " + filePath + "\\" + basePath + ".sht\n" +
+                "\"" + vtexPath + "\" -dontusegamedir -quiet \"" + filePath + basePath + ".sht\"\n" +
                 "xcopy /y \"" + filePath + "\\" + basePath + ".vtf\"" + " \"" + folder + "\"\n" +
                 "rmdir " + filePath + " /s /q\nexit";
             File.WriteAllText(filePath + fileName, content);
             File.WriteAllText(folder + "\\mksheet.bat", batchFile);
 
-            //Run the last created bat file
-            ProcessStartInfo processStartInfo = new ProcessStartInfo();
+			//Run the last created bat file
+			ProcessStartInfo processStartInfo = new ProcessStartInfo();
             processStartInfo.FileName = folder + "\\mksheet.bat";
             processStartInfo.CreateNoWindow = true;
             processStartInfo.UseShellExecute = false;

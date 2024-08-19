@@ -43,6 +43,7 @@
 			sdkpathLabel = new LinkLabel();
 			additiveCheckbox = new CheckBox();
 			blendBox = new CheckBox();
+			coloralpha = new CheckBox();
 			((System.ComponentModel.ISupportInitialize)previewImage).BeginInit();
 			SuspendLayout();
 			// 
@@ -83,7 +84,7 @@
 			// 
 			// sizex
 			// 
-			sizex.Location = new Point(215, 135);
+			sizex.Location = new Point(215, 134);
 			sizex.Margin = new Padding(2);
 			sizex.Name = "sizex";
 			sizex.RightToLeft = RightToLeft.Yes;
@@ -196,7 +197,7 @@
 			// blendBox
 			// 
 			blendBox.AutoSize = true;
-			blendBox.Location = new Point(215, 222);
+			blendBox.Location = new Point(215, 218);
 			blendBox.Margin = new Padding(2);
 			blendBox.Name = "blendBox";
 			blendBox.Size = new Size(97, 19);
@@ -204,12 +205,24 @@
 			blendBox.Text = "Blend Frames";
 			blendBox.UseVisualStyleBackColor = true;
 			// 
+			// coloralpha
+			// 
+			coloralpha.AutoSize = true;
+			coloralpha.Location = new Point(215, 238);
+			coloralpha.Margin = new Padding(2);
+			coloralpha.Name = "coloralpha";
+			coloralpha.Size = new Size(93, 19);
+			coloralpha.TabIndex = 15;
+			coloralpha.Text = "$color/alpha";
+			coloralpha.UseVisualStyleBackColor = true;
+			// 
 			// Form1
 			// 
 			AllowDrop = true;
 			AutoScaleMode = AutoScaleMode.None;
 			AutoSize = true;
 			ClientSize = new Size(330, 293);
+			Controls.Add(coloralpha);
 			Controls.Add(blendBox);
 			Controls.Add(additiveCheckbox);
 			Controls.Add(sdkpathLabel);
@@ -254,5 +267,6 @@
         private LinkLabel sdkpathLabel;
         private CheckBox additiveCheckbox;
         private CheckBox blendBox;
-    }
+		private CheckBox coloralpha;
+	}
 }
