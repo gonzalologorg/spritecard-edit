@@ -11,4 +11,8 @@ Example you can play with:
 ![T_UI_Fire_Aura](https://github.com/user-attachments/assets/83880d81-e2e3-4f54-9e37-98b92789e543)
 ![T_UI_StoryDemo_BloodSplatter](https://github.com/user-attachments/assets/f1cdd3ea-b4b6-4407-b0d2-3241effb2f49)
 
+# Compability
+
+As far I can see, it works fine with Counter-Strike: Source, not really sure why, but SDK 2010 doesn't work well, so I recommend you in case it doesn't work, just get CSS and use it mksheet.exe
+
 Please feel free to ask your questions and/or contribuite with this software
