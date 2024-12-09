@@ -138,7 +138,8 @@ namespace MKSCreator
             string filePath = folder + "\\" + basePath + "\\";
             string content = "sequence 0";
             if (kindseq.Checked) {
-                content += "\nloop\n";
+                if (loopBox.Checked)
+                    content += "\nloop\n";
 
                 for (int i = 0; i < frameCount; i++)
                 {
@@ -146,7 +147,9 @@ namespace MKSCreator
                 }
             } else
             {
-                content += "\nloop";
+				if (loopBox.Checked)
+					content += "\nloop";
+
                 for (int i = 0; i < frameCount; i++)
                 {
                     content += "\nframe " + filePath + i + ".tga" + " 1\nsequence " + i + "\nloop\n";
@@ -158,8 +161,11 @@ namespace MKSCreator
             string vtexPath = mksPath.Replace("mksheet.exe", "vtex.exe");
             string batchFile = "@ECHO ON\n\"" + Properties.Settings.Default.mksPath + "\" \"" + filePath + fileName + "\"\n" +
                 "\"" + vtexPath + "\" -dontusegamedir -quiet \"" + filePath + basePath + ".sht\"\n" +
-                "xcopy /y \"" + filePath + "\\" + basePath + ".vtf\"" + " \"" + folder + "\"\n" +
-                "rmdir " + filePath + " /s /q\nexit";
+                "xcopy /y \"" + filePath + "\\" + basePath + ".vtf\"" + " \"" + folder + "\"\n";
+
+            if (!keepBox.Checked)
+				batchFile += "rmdir " + filePath + " /s /q\nexit";
+
             File.WriteAllText(filePath + fileName, content);
             File.WriteAllText(folder + "\\mksheet.bat", batchFile);
 
@@ -171,7 +177,9 @@ namespace MKSCreator
             workingDirectory = folder + "\\mksheet.bat";
 
             Process.Start(processStartInfo);
-            Task.Run(() => removeFile());
+
+            if (!keepBox.Checked)
+                Task.Run(() => removeFile());
         }
 
         private async void removeFile()

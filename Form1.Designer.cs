@@ -37,13 +37,14 @@
 			kindseq = new RadioButton();
 			kindsingle = new RadioButton();
 			label3 = new Label();
-			label4 = new Label();
 			sizey = new TextBox();
 			exportButton = new Button();
 			sdkpathLabel = new LinkLabel();
 			additiveCheckbox = new CheckBox();
 			blendBox = new CheckBox();
 			coloralpha = new CheckBox();
+			loopBox = new CheckBox();
+			keepBox = new CheckBox();
 			((System.ComponentModel.ISupportInitialize)previewImage).BeginInit();
 			SuspendLayout();
 			// 
@@ -78,7 +79,7 @@
 			label1.Location = new Point(11, 8);
 			label1.Margin = new Padding(2, 0, 2, 0);
 			label1.Name = "label1";
-			label1.Size = new Size(101, 15);
+			label1.Size = new Size(100, 15);
 			label1.TabIndex = 2;
 			label1.Text = "$basetexture Path";
 			// 
@@ -88,7 +89,7 @@
 			sizex.Margin = new Padding(2);
 			sizex.Name = "sizex";
 			sizex.RightToLeft = RightToLeft.Yes;
-			sizex.Size = new Size(96, 23);
+			sizex.Size = new Size(50, 23);
 			sizex.TabIndex = 4;
 			sizex.Text = "2";
 			sizex.TextChanged += rowColChange;
@@ -99,7 +100,7 @@
 			label2.Location = new Point(215, 54);
 			label2.Margin = new Padding(2, 0, 2, 0);
 			label2.Name = "label2";
-			label2.Size = new Size(31, 15);
+			label2.Size = new Size(32, 15);
 			label2.TabIndex = 5;
 			label2.Text = "Type";
 			// 
@@ -133,27 +134,17 @@
 			label3.Location = new Point(215, 118);
 			label3.Margin = new Padding(2, 0, 2, 0);
 			label3.Name = "label3";
-			label3.Size = new Size(55, 15);
+			label3.Size = new Size(94, 15);
 			label3.TabIndex = 8;
-			label3.Text = "Columns";
-			// 
-			// label4
-			// 
-			label4.AutoSize = true;
-			label4.Location = new Point(215, 160);
-			label4.Margin = new Padding(2, 0, 2, 0);
-			label4.Name = "label4";
-			label4.Size = new Size(35, 15);
-			label4.TabIndex = 9;
-			label4.Text = "Rows";
+			label3.Text = "Columns / Rows";
 			// 
 			// sizey
 			// 
-			sizey.Location = new Point(215, 172);
+			sizey.Location = new Point(269, 134);
 			sizey.Margin = new Padding(2);
 			sizey.Name = "sizey";
 			sizey.RightToLeft = RightToLeft.Yes;
-			sizey.Size = new Size(96, 23);
+			sizey.Size = new Size(50, 23);
 			sizey.TabIndex = 10;
 			sizey.Text = "2";
 			sizey.TextChanged += rowColChange;
@@ -186,7 +177,7 @@
 			// additiveCheckbox
 			// 
 			additiveCheckbox.AutoSize = true;
-			additiveCheckbox.Location = new Point(215, 199);
+			additiveCheckbox.Location = new Point(215, 212);
 			additiveCheckbox.Margin = new Padding(2);
 			additiveCheckbox.Name = "additiveCheckbox";
 			additiveCheckbox.Size = new Size(70, 19);
@@ -197,7 +188,7 @@
 			// blendBox
 			// 
 			blendBox.AutoSize = true;
-			blendBox.Location = new Point(215, 218);
+			blendBox.Location = new Point(215, 178);
 			blendBox.Margin = new Padding(2);
 			blendBox.Name = "blendBox";
 			blendBox.Size = new Size(97, 19);
@@ -208,7 +199,7 @@
 			// coloralpha
 			// 
 			coloralpha.AutoSize = true;
-			coloralpha.Location = new Point(215, 238);
+			coloralpha.Location = new Point(215, 195);
 			coloralpha.Margin = new Padding(2);
 			coloralpha.Name = "coloralpha";
 			coloralpha.Size = new Size(93, 19);
@@ -216,19 +207,42 @@
 			coloralpha.Text = "$color/alpha";
 			coloralpha.UseVisualStyleBackColor = true;
 			// 
+			// loopBox
+			// 
+			loopBox.AutoSize = true;
+			loopBox.Location = new Point(215, 161);
+			loopBox.Margin = new Padding(2);
+			loopBox.Name = "loopBox";
+			loopBox.Size = new Size(66, 19);
+			loopBox.TabIndex = 16;
+			loopBox.Text = "Looped";
+			loopBox.UseVisualStyleBackColor = true;
+			// 
+			// keepBox
+			// 
+			keepBox.AutoSize = true;
+			keepBox.Location = new Point(215, 229);
+			keepBox.Margin = new Padding(2);
+			keepBox.Name = "keepBox";
+			keepBox.Size = new Size(79, 19);
+			keepBox.TabIndex = 17;
+			keepBox.Text = "Keep MKS";
+			keepBox.UseVisualStyleBackColor = true;
+			// 
 			// Form1
 			// 
 			AllowDrop = true;
 			AutoScaleMode = AutoScaleMode.None;
 			AutoSize = true;
 			ClientSize = new Size(330, 293);
+			Controls.Add(keepBox);
+			Controls.Add(loopBox);
 			Controls.Add(coloralpha);
 			Controls.Add(blendBox);
 			Controls.Add(additiveCheckbox);
 			Controls.Add(sdkpathLabel);
 			Controls.Add(exportButton);
 			Controls.Add(sizey);
-			Controls.Add(label4);
 			Controls.Add(label3);
 			Controls.Add(kindsingle);
 			Controls.Add(kindseq);
@@ -261,12 +275,13 @@
         private RadioButton kindseq;
         private RadioButton kindsingle;
         private Label label3;
-        private Label label4;
         private TextBox sizey;
         private Button exportButton;
         private LinkLabel sdkpathLabel;
         private CheckBox additiveCheckbox;
         private CheckBox blendBox;
 		private CheckBox coloralpha;
+		private CheckBox loopBox;
+		private CheckBox keepBox;
 	}
 }
