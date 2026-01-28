@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.Numerics;
 using TGASharpLib;
@@ -160,7 +161,7 @@ namespace MKSCreator
             string mksPath = Properties.Settings.Default.mksPath;
             string vtexPath = mksPath.Replace("mksheet.exe", "vtex.exe");
             string batchFile = "@ECHO ON\n\"" + Properties.Settings.Default.mksPath + "\" \"" + filePath + fileName + "\"\n" +
-                "\"" + vtexPath + "\" -dontusegamedir -quiet \"" + filePath + basePath + ".sht\"\n" +
+                "\"" + vtexPath + "\" -dontusegamedir -quiet \"" + filePath + basePath + ".sht\" nocompress nolod nomip clamps clampt clampu\n" +
                 "xcopy /y \"" + filePath + "\\" + basePath + ".vtf\"" + " \"" + folder + "\"\n";
 
             if (!keepBox.Checked)
@@ -168,6 +169,13 @@ namespace MKSCreator
 
             File.WriteAllText(filePath + fileName, content);
             File.WriteAllText(folder + "\\mksheet.bat", batchFile);
+
+			File.WriteAllText(filePath + "\\" + basePath + ".txt", @"nocompress 1;
+nolod 1;
+nomip 1;
+clamps 1;
+clampt 1;
+clampu 1;");
 
 			//Run the last created bat file
 			ProcessStartInfo processStartInfo = new ProcessStartInfo();
@@ -232,19 +240,38 @@ namespace MKSCreator
         {
             float cols = Int32.Parse(sizex.Text);
             float rows = Int32.Parse(sizey.Text);
-            int colSize = (int)Math.Floor(200 / cols);
-            int rowSize = (int)Math.Floor(200 / rows);
+            int colSize = (int)Math.Floor(256 / cols);
+            int rowSize = (int)Math.Floor(256 / rows);
 
-            using (Pen pen = new Pen(Color.Black, 1))
-                e.Graphics.DrawRectangle(pen, 0, 0, 199, 199);
+			Graphics g = e.Graphics;
 
-            for (int i = 1; i < cols; i++)
+			using (SolidBrush brush = new SolidBrush(Color.FromArgb(200, Color.LightGray)))
+            {
+                for (int y = 0; y < 8; y++)
+                {
+                    for (int x = 0; x < 8; x++)
+                    {
+                        if ((x + y) % 2 == 0)
+                        {
+                            e.Graphics.FillRectangle(brush, x * 32, y * 32, 32, 32);
+                        }
+                    }
+                }
+            }
+
+			using (Pen pen = new Pen(Color.Black, 1))
+            {
+                g.DrawImage(previewImage.Image, new Rectangle(0, 0, 256, 256));
+                g.DrawRectangle(pen, 0, 0, 255, 255);
+            }
+
+			for (int i = 1; i < cols; i++)
                 using (Pen pen = new Pen(Color.HotPink, 1))
-                    e.Graphics.DrawLine(pen, new Point(i * colSize, 0), new Point(i * colSize, 200));
+                    e.Graphics.DrawLine(pen, new Point(i * colSize, 0), new Point(i * colSize, 256));
 
             for (int i = 1; i < rows; i++)
                 using (Pen pen = new Pen(Color.HotPink, 1))
-                    e.Graphics.DrawLine(pen, new Point(0, i * rowSize), new Point(200, i * rowSize));
+                    e.Graphics.DrawLine(pen, new Point(0, i * rowSize), new Point(256, i * rowSize));
         }
 
         private void rowColChange(object sender, EventArgs e)
