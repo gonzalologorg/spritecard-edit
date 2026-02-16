@@ -84,11 +84,6 @@ namespace MKSCreator
             generateMKS(folder, fileNameNoExtension);
         }
 
-		private static int NearestPowerOf2(uint x)
-		{
-			return 1 << (sizeof(uint) * 8 - BitOperations.LeadingZeroCount(x - 1));
-		}
-
 		void createWorkSpace(string folder, string vtf, string fileNoName)
         {
             if (Directory.Exists(folder + "\\" + fileNoName))
@@ -108,7 +103,8 @@ namespace MKSCreator
                 {
                     Bitmap newBitmap = new Bitmap(colSize, rowSize);
                     Graphics g = Graphics.FromImage(newBitmap);
-                    g.DrawImage(image, new Rectangle(0, 0, NearestPowerOf2((uint)colSize), NearestPowerOf2((uint)rowSize)), new Rectangle(x * colSize, y * rowSize, colSize, rowSize), GraphicsUnit.Pixel);
+					
+                    g.DrawImage(image, new Rectangle(0, 0, colSize, rowSize), new Rectangle(x * colSize, y * rowSize, colSize, rowSize), GraphicsUnit.Pixel);
 
                     TGA tgaImage = TGA.FromBitmap(newBitmap);
                     tgaImage.Save(folder + "\\" + fileNoName + "\\" + frameId + ".tga");
