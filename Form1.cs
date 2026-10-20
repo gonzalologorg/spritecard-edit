@@ -7,82 +7,105 @@ using TGASharpLib;
 
 namespace MKSCreator
 {
-    public partial class Form1 : Form
-    {
-        int frameCount = 0;
-        public Form1()
-        {
-            InitializeComponent();
-            this.DragEnter += new DragEventHandler(Form1_DragEnter);
-            this.DragDrop += new DragEventHandler(Form1_DragDrop);
+	public partial class Form1 : Form
+	{
+		int frameCount = 0;
+		int currentFrame = 0;
+		private readonly System.Windows.Forms.Timer animationTimer = new();
+		private int animationFrame;
 
-            string lastImage = Properties.Settings.Default.lastImage;
-            if (lastImage != "")
-            {
-                previewImage.ImageLocation = lastImage;
-            }
+		public Form1()
+		{
+			InitializeComponent();
+			this.DragEnter += new DragEventHandler(Form1_DragEnter);
+			this.DragDrop += new DragEventHandler(Form1_DragDrop);
 
-            string lastPath = Properties.Settings.Default.lastPath;
-            if (lastPath != "")
-            {
-                targetPath.Text = lastPath;
-            }
+			string lastImage = Properties.Settings.Default.lastImage;
+			if (lastImage != "")
+			{
+				previewImage.ImageLocation = lastImage;
+			}
+
+			string lastPath = Properties.Settings.Default.lastPath;
+			if (lastPath != "")
+			{
+				targetPath.Text = lastPath;
+			}
 
 			string[] args = Environment.GetCommandLineArgs();
-            if (args.Length > 1)
-            {
+			if (args.Length > 1)
+			{
 				Properties.Settings.Default.lastImage = args[1];
 				Properties.Settings.Default.Save();
 
 				previewImage.ImageLocation = args[1];
 			}
+
+			//Preview window
+
+			previewWindow.Paint += previewWindow_Paint;
+			speedSlider.ValueChanged += speedSlider_ValueChanged;
+
+			animationTimer.Tick += (_, _) =>
+			{
+				animationFrame++;
+				previewWindow.Invalidate();
+			};
+
+			UpdateAnimationSpeed();
+			animationTimer.Start();
 		}
 
-        void Form1_DragEnter(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
-        }
+		void Form1_DragEnter(object sender, DragEventArgs e)
+		{
+			if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
+		}
 
-        void Form1_DragDrop(object sender, DragEventArgs e)
-        {
-            string file = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
-            if (file.EndsWith(".png") || file.EndsWith(".jpg") || file.EndsWith(".jpeg"))
-            {
-                Properties.Settings.Default.lastImage = file;
-                Properties.Settings.Default.Save();
+		void Form1_DragDrop(object sender, DragEventArgs e)
+		{
+			string file = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
+			if (file.EndsWith(".png") || file.EndsWith(".jpg") || file.EndsWith(".jpeg"))
+			{
+				Properties.Settings.Default.lastImage = file;
+				Properties.Settings.Default.Save();
 
-                previewImage.ImageLocation = file;
-            }
-            else
-            {
-                MessageBox.Show("Please drop a valid image file", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+				previewImage.ImageLocation = file;
+			}
+			else
+			{
+				MessageBox.Show("Please drop a valid image file", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+		}
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            string path = Properties.Settings.Default.mksPath;
-            if (path == "")
-            {
-                MessageBox.Show("Please you have to provide mksheet.exe path", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+		private void button2_Click(object sender, EventArgs e)
+		{
+			string path = Properties.Settings.Default.mksPath;
+			if (path == "")
+			{
+				MessageBox.Show("Please you have to provide mksheet.exe path", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return;
+			}
 
-            //Open a save file dialog for a vtf file to save
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-            saveFileDialog1.Filter = "VTF File|*.vtf";
-            saveFileDialog1.Title = "Save the VTF file";
-            saveFileDialog1.ShowDialog();
+			//Open a save file dialog for a vtf file to save
+			SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+			saveFileDialog1.Filter = "VTF File|*.vtf";
+			saveFileDialog1.Title = "Save the VTF file";
+			saveFileDialog1.ShowDialog();
 
-            string vtfName = saveFileDialog1.FileName;
-            string vmtName = vtfName.Replace(".vtf", ".vmt");
-            string fileNameNoExtension = Path.GetFileNameWithoutExtension(vtfName);
-            string folder = Path.GetDirectoryName(vtfName);
+			string vtfName = saveFileDialog1.FileName;
+			string vmtName = vtfName.Replace(".vtf", ".vmt");
+			string fileNameNoExtension = Path.GetFileNameWithoutExtension(vtfName);
+			string folder = Path.GetDirectoryName(vtfName);
 
-            generateVMTFile(fileNameNoExtension, vmtName);
-            createWorkSpace(folder, vtfName, fileNameNoExtension);
-            generateMKS(folder, fileNameNoExtension);
-        }
+			if (vtfName == "" || folder == null || folder == "")
+			{
+				return;
+			}
+
+			generateVMTFile(fileNameNoExtension, vmtName);
+			createWorkSpace(folder, vtfName, fileNameNoExtension);
+			generateMKS(folder, fileNameNoExtension);
+		}
 
 		private static int NearestPowerOf2(uint x)
 		{
@@ -90,85 +113,85 @@ namespace MKSCreator
 		}
 
 		void createWorkSpace(string folder, string vtf, string fileNoName)
-        {
-            if (Directory.Exists(folder + "\\" + fileNoName))
-                Directory.Delete(folder + "\\" + fileNoName, true);
+		{
+			if (Directory.Exists(folder + "\\" + fileNoName))
+				Directory.Delete(folder + "\\" + fileNoName, true);
 
-            Directory.CreateDirectory(folder + "\\" + fileNoName);
-            Bitmap image = new Bitmap(previewImage.ImageLocation);
-            float cols = Int32.Parse(sizex.Text);
-            float rows = Int32.Parse(sizey.Text);
-            int colSize = (int)Math.Floor(image.Width / cols);
-            int rowSize = (int)Math.Floor(image.Height / rows);
+			Directory.CreateDirectory(folder + "\\" + fileNoName);
+			Bitmap image = new Bitmap(previewImage.ImageLocation);
+			float cols = Int32.Parse(sizex.Text);
+			float rows = Int32.Parse(sizey.Text);
+			int colSize = (int)Math.Floor(image.Width / cols);
+			int rowSize = (int)Math.Floor(image.Height / rows);
 
-            int frameId = 0;
-            for (int y = 0; y < rows; y++)
-            {
-                for (int x = 0; x < cols; x++)
-                {
-                    Bitmap newBitmap = new Bitmap(colSize, rowSize);
-                    Graphics g = Graphics.FromImage(newBitmap);
-                    g.DrawImage(image, new Rectangle(0, 0, NearestPowerOf2((uint)colSize), NearestPowerOf2((uint)rowSize)), new Rectangle(x * colSize, y * rowSize, colSize, rowSize), GraphicsUnit.Pixel);
+			int frameId = 0;
+			for (int y = 0; y < rows; y++)
+			{
+				for (int x = 0; x < cols; x++)
+				{
+					Bitmap newBitmap = new Bitmap(colSize, rowSize);
+					Graphics g = Graphics.FromImage(newBitmap);
+					g.DrawImage(image, new Rectangle(0, 0, NearestPowerOf2((uint)colSize), NearestPowerOf2((uint)rowSize)), new Rectangle(x * colSize, y * rowSize, colSize, rowSize), GraphicsUnit.Pixel);
 
-                    TGA tgaImage = TGA.FromBitmap(newBitmap);
-                    tgaImage.Save(folder + "\\" + fileNoName + "\\" + frameId + ".tga");
-                    frameId++;
-                }
-            }
+					TGA tgaImage = TGA.FromBitmap(newBitmap);
+					tgaImage.Save(folder + "\\" + fileNoName + "\\" + frameId + ".tga");
+					frameId++;
+				}
+			}
 
-            frameCount = frameId;
-        }
+			frameCount = frameId;
+		}
 
-        void generateVMTFile(string fileNameNoExtension, string vmt)
-        {
-            string vmtTemplate = "\"SpriteCard\"\n" +
-                "{\n" +
-                "\t$basetexture \"" + targetPath.Text + "/" + fileNameNoExtension + "\"\n" +
-                "\t$translucent \"1\"\n" +
-                "\t$blendframes \"" + (blendBox.Checked ? "1" : "0") + "\"\n" +
-				"\t$vertexcolor \"" + (coloralpha.Checked ? "1" : "0") + "\"\n" +
-				"\t$vertexalpha \"" + (coloralpha.Checked ? "1" : "0") + "\"\n" +
+		void generateVMTFile(string fileNameNoExtension, string vmt)
+		{
+			string vmtTemplate = "\"SpriteCard\"\n" +
+				"{\n" +
+				"\t$basetexture \"" + targetPath.Text + "/" + fileNameNoExtension + "\"\n" +
+				"\t$translucent \"1\"\n" +
+				"\t$blendframes \"" + (blendBox.Checked ? "1" : "0") + "\"\n" +
 				"\t$additive \"" + (additiveCheckbox.Checked ? "1" : "0") + "\"\n}";
 
-            File.WriteAllText(vmt, vmtTemplate);
-        }
+			File.WriteAllText(vmt, vmtTemplate);
+		}
 
-        string workingDirectory;
-        void generateMKS(string folder, string basePath)
-        {
-            string filePath = folder + "\\" + basePath + "\\";
-            string content = "sequence 0";
-            if (kindseq.Checked) {
-                if (loopBox.Checked)
-                    content += "\nloop\n";
+		string workingDirectory;
+		void generateMKS(string folder, string basePath)
+		{
+			string filePath = folder + "\\" + basePath + "\\";
+			string content = "sequence 0";
+			if (kindseq.Checked)
+			{
+				if (loopBox.Checked)
+					content += "\nloop\n";
 
-                for (int i = 0; i < frameCount; i++)
-                {
-                    content += "\nframe " + filePath + i + ".tga" + " 1 ";
-                }
-            } else
-            {
+				for (int i = 0; i < frameCount; i++)
+				{
+					content += "\nframe " + basePath + "\\" + i + ".tga" + " 1 ";
+				}
+			}
+			else
+			{
 				if (loopBox.Checked)
 					content += "\nloop";
 
-                for (int i = 0; i < frameCount; i++)
-                {
-                    content += "\nframe " + filePath + i + ".tga" + " 1\nsequence " + i + "\nloop\n";
-                }
-            }
+				for (int i = 0; i < frameCount; i++)
+				{
+					content += "\nframe .\\" + basePath + "\\" + i + ".tga" + " 1\nsequence " + i + "\nloop\n";
+				}
+			}
 
-            string fileName = basePath + ".mks";
-            string mksPath = Properties.Settings.Default.mksPath;
-            string vtexPath = mksPath.Replace("mksheet.exe", "vtex.exe");
-            string batchFile = "@ECHO ON\n\"" + Properties.Settings.Default.mksPath + "\" \"" + filePath + fileName + "\"\n" +
-                "\"" + vtexPath + "\" -dontusegamedir -quiet \"" + filePath + basePath + ".sht\" nocompress nolod nomip clamps clampt clampu\n" +
-                "xcopy /y \"" + filePath + "\\" + basePath + ".vtf\"" + " \"" + folder + "\"\n";
+			string fileName = basePath + ".mks";
+			string mksPath = Properties.Settings.Default.mksPath;
+			string vtexPath = mksPath.Replace("mksheet.exe", "vtex.exe");
+			string batchFile = "@ECHO ON\n\"" + Properties.Settings.Default.mksPath + "\" \"" + filePath + fileName + "\"\n" +
+				"\"" + vtexPath + "\" -dontusegamedir -quiet \"" + filePath + basePath + ".sht\" nocompress nolod nomip clamps clampt clampu\n" +
+				"xcopy /y \"" + filePath + "\\" + basePath + ".vtf\"" + " \"" + folder + "\"\n";
 
-            if (!keepBox.Checked)
-				batchFile += "rmdir " + filePath + " /s /q\nexit";
+			if (!keepBox.Checked)
+				batchFile += "rmdir \"" + filePath + "\" /s /q\nexit";
 
-            File.WriteAllText(filePath + fileName, content);
-            File.WriteAllText(folder + "\\mksheet.bat", batchFile);
+			File.WriteAllText(filePath + fileName, content);
+			File.WriteAllText(folder + "\\mksheet.bat", batchFile);
 
 			File.WriteAllText(filePath + "\\" + basePath + ".txt", @"nocompress 1;
 nolod 1;
@@ -179,115 +202,179 @@ clampu 1;");
 
 			//Run the last created bat file
 			ProcessStartInfo processStartInfo = new ProcessStartInfo();
-            processStartInfo.FileName = folder + "\\mksheet.bat";
-            processStartInfo.CreateNoWindow = true;
-            processStartInfo.UseShellExecute = false;
-            workingDirectory = folder + "\\mksheet.bat";
+			processStartInfo.FileName = folder + "\\mksheet.bat";
+			processStartInfo.WorkingDirectory = folder;
+			processStartInfo.CreateNoWindow = false;
+			processStartInfo.UseShellExecute = true;
+			workingDirectory = folder + "\\mksheet.bat";
 
-            Process.Start(processStartInfo);
+			Process.Start(processStartInfo);
 
-            if (!keepBox.Checked)
-                Task.Run(() => removeFile());
-        }
+			if (!keepBox.Checked)
+				Task.Run(() => removeFile());
+		}
 
-        private async void removeFile()
-        {
-            await Task.Delay(2000);
-            File.Delete(workingDirectory);
-        }
+		private async void removeFile()
+		{
+			await Task.Delay(2000);
+			File.Delete(workingDirectory);
+		}
 
-        void batch_Exited(object sender, EventArgs e)
-        {
-            Directory.Delete(workingDirectory, true);
-        }
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            OpenFileDialog fileSelector = new OpenFileDialog();
-            fileSelector.Filter = "MKSheet on bin folder|mksheet.exe";
-            fileSelector.Title = "Select the mksheet.exe file";
-            fileSelector.ShowDialog();
+		void batch_Exited(object sender, EventArgs e)
+		{
+			Directory.Delete(workingDirectory, true);
+		}
+		private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			OpenFileDialog fileSelector = new OpenFileDialog();
+			fileSelector.Filter = "MKSheet on bin folder|mksheet.exe";
+			fileSelector.Title = "Select the mksheet.exe file";
+			fileSelector.ShowDialog();
 
-            if (fileSelector.FileName == "")
-            {
-                return;
-            }
+			if (fileSelector.FileName == "")
+			{
+				return;
+			}
 
-            sdkpathLabel.Text = "SDK Path (OK)";
-            Properties.Settings.Default.mksPath = fileSelector.FileName;
-            Properties.Settings.Default.Save();
-        }
+			sdkpathLabel.Text = "SDK Path (OK)";
+			Properties.Settings.Default.mksPath = fileSelector.FileName;
+			Properties.Settings.Default.Save();
+		}
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            string path = Properties.Settings.Default.mksPath;
-            if (path == "")
-            {
-                sdkpathLabel.Text = "SDK Path (Not set)";
-            }
-            else
-            {
-                sdkpathLabel.Text = "SDK Path (OK)";
-            }
-            sdkpathLabel.TextAlign = ContentAlignment.MiddleRight;
-        }
+		private void Form1_Load(object sender, EventArgs e)
+		{
+			string path = Properties.Settings.Default.mksPath;
+			if (path == "")
+			{
+				sdkpathLabel.Text = "SDK Path (Not set)";
+			}
+			else
+			{
+				sdkpathLabel.Text = "SDK Path (OK)";
+			}
+			sdkpathLabel.TextAlign = ContentAlignment.MiddleRight;
+		}
 
-        private void previewImage_DragDrop(object sender, DragEventArgs e)
-        {
-            MessageBox.Show("Dropped");
-        }
+		private void previewImage_DragDrop(object sender, DragEventArgs e)
+		{
+			MessageBox.Show("Dropped");
+		}
 
-        private void previewImage_Paint(object sender, PaintEventArgs e)
-        {
-            float cols = Int32.Parse(sizex.Text);
-            float rows = Int32.Parse(sizey.Text);
-            int colSize = (int)Math.Floor(256 / cols);
-            int rowSize = (int)Math.Floor(256 / rows);
+		private void previewImage_Paint(object sender, PaintEventArgs e)
+		{
+			float cols = Int32.Parse(sizex.Text);
+			float rows = Int32.Parse(sizey.Text);
+			int colSize = (int)Math.Floor(256 / cols);
+			int rowSize = (int)Math.Floor(256 / rows);
 
 			Graphics g = e.Graphics;
 
 			using (SolidBrush brush = new SolidBrush(Color.FromArgb(200, Color.LightGray)))
-            {
-                for (int y = 0; y < 8; y++)
-                {
-                    for (int x = 0; x < 8; x++)
-                    {
-                        if ((x + y) % 2 == 0)
-                        {
-                            e.Graphics.FillRectangle(brush, x * 32, y * 32, 32, 32);
-                        }
-                    }
-                }
-            }
+			{
+				for (int y = 0; y < 8; y++)
+				{
+					for (int x = 0; x < 8; x++)
+					{
+						if ((x + y) % 2 == 0)
+						{
+							e.Graphics.FillRectangle(brush, x * 32, y * 32, 32, 32);
+						}
+					}
+				}
+			}
 
 			using (Pen pen = new Pen(Color.Black, 1))
-            {
-                g.DrawImage(previewImage.Image, new Rectangle(0, 0, 256, 256));
-                g.DrawRectangle(pen, 0, 0, 255, 255);
-            }
+			{
+				if (previewImage.Image != null)
+				{
+					g.DrawImage(previewImage.Image, new Rectangle(0, 0, 256, 256));
+				}
+				g.DrawRectangle(pen, 0, 0, 255, 255);
+			}
 
 			for (int i = 1; i < cols; i++)
-                using (Pen pen = new Pen(Color.HotPink, 1))
-                    e.Graphics.DrawLine(pen, new Point(i * colSize, 0), new Point(i * colSize, 256));
+				using (Pen pen = new Pen(Color.HotPink, 1))
+					e.Graphics.DrawLine(pen, new Point(i * colSize, 0), new Point(i * colSize, 256));
 
-            for (int i = 1; i < rows; i++)
-                using (Pen pen = new Pen(Color.HotPink, 1))
-                    e.Graphics.DrawLine(pen, new Point(0, i * rowSize), new Point(256, i * rowSize));
-        }
+			for (int i = 1; i < rows; i++)
+				using (Pen pen = new Pen(Color.HotPink, 1))
+					e.Graphics.DrawLine(pen, new Point(0, i * rowSize), new Point(256, i * rowSize));
+		}
 
-        private void rowColChange(object sender, EventArgs e)
-        {
-            TextBox self = (TextBox)sender;
-            int result;
-            if (Int32.TryParse(self.Text, out result))
-            {
-                previewImage.Invalidate();
-            }
-        }
+		private void rowColChange(object sender, EventArgs e)
+		{
+			TextBox self = (TextBox)sender;
+			int result;
+			if (Int32.TryParse(self.Text, out result))
+			{
+				previewImage.Invalidate();
+			}
+		}
 
-        private void targetPath_TextChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.lastPath = targetPath.Text;
-            Properties.Settings.Default.Save();
-        }
-    }
+		private void targetPath_TextChanged(object sender, EventArgs e)
+		{
+			Properties.Settings.Default.lastPath = targetPath.Text;
+			Properties.Settings.Default.Save();
+		}
+
+		private void speedSlider_ValueChanged(object sender, EventArgs e)
+		{
+			speedLabel.Text = (int.TryParse(speedSlider.Value.ToString(), out int result) ? result * 10 : 0) + "%";
+			UpdateAnimationSpeed();
+		}
+
+		private void UpdateAnimationSpeed()
+		{
+			// El valor del slider se interpreta como fotogramas por segundo.
+			animationTimer.Interval = Math.Max(1, 1000 / Math.Max(1, speedSlider.Value));
+		}
+
+		private void previewWindow_Paint(object sender, PaintEventArgs e)
+		{
+			Image image = previewImage.Image;
+			if (image == null ||
+				!int.TryParse(sizex.Text, out int columns) ||
+				!int.TryParse(sizey.Text, out int rows) ||
+				columns <= 0 ||
+				rows <= 0)
+			{
+				return;
+			}
+
+			int totalFrames = columns * rows;
+			if (totalFrames <= 0)
+			{
+				return;
+			}
+
+			animationFrame %= totalFrames;
+
+			int column = animationFrame % columns;
+			int row = animationFrame / columns;
+
+			int left = column * image.Width / columns;
+			int top = row * image.Height / rows;
+			int right = (column + 1) * image.Width / columns;
+			int bottom = (row + 1) * image.Height / rows;
+
+			Rectangle source = new(left, top, right - left, bottom - top);
+			Graphics g = e.Graphics;
+
+			g.DrawImage(
+				image,
+				previewWindow.ClientRectangle,
+				source,
+				GraphicsUnit.Pixel);
+
+			using (Pen pen = new Pen(Color.Black, 1))
+			{
+				g.DrawRectangle(pen, 0, 0, 127, 127);
+			}
+		}
+
+		private void speedSlider_Scroll(object sender, EventArgs e)
+		{
+
+		}
+	}
 }

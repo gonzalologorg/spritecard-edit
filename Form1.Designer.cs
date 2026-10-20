@@ -42,10 +42,15 @@
 			sdkpathLabel = new LinkLabel();
 			additiveCheckbox = new CheckBox();
 			blendBox = new CheckBox();
-			coloralpha = new CheckBox();
 			loopBox = new CheckBox();
 			keepBox = new CheckBox();
+			previewWindow = new PictureBox();
+			label4 = new Label();
+			speedSlider = new TrackBar();
+			speedLabel = new Label();
 			((System.ComponentModel.ISupportInitialize)previewImage).BeginInit();
+			((System.ComponentModel.ISupportInitialize)previewWindow).BeginInit();
+			((System.ComponentModel.ISupportInitialize)speedSlider).BeginInit();
 			SuspendLayout();
 			// 
 			// previewImage
@@ -66,7 +71,7 @@
 			targetPath.Location = new Point(11, 25);
 			targetPath.Margin = new Padding(2);
 			targetPath.Name = "targetPath";
-			targetPath.Size = new Size(378, 27);
+			targetPath.Size = new Size(466, 27);
 			targetPath.TabIndex = 1;
 			targetPath.TextChanged += targetPath_TextChanged;
 			// 
@@ -86,7 +91,7 @@
 			sizex.Margin = new Padding(2);
 			sizex.Name = "sizex";
 			sizex.RightToLeft = RightToLeft.Yes;
-			sizex.Size = new Size(57, 27);
+			sizex.Size = new Size(48, 27);
 			sizex.TabIndex = 4;
 			sizex.Text = "2";
 			sizex.TextChanged += rowColChange;
@@ -137,11 +142,11 @@
 			// 
 			// sizey
 			// 
-			sizey.Location = new Point(339, 143);
+			sizey.Location = new Point(323, 143);
 			sizey.Margin = new Padding(2);
 			sizey.Name = "sizey";
 			sizey.RightToLeft = RightToLeft.Yes;
-			sizey.Size = new Size(47, 27);
+			sizey.Size = new Size(48, 27);
 			sizey.TabIndex = 10;
 			sizey.Text = "2";
 			sizey.TextChanged += rowColChange;
@@ -151,7 +156,7 @@
 			exportButton.Location = new Point(11, 314);
 			exportButton.Margin = new Padding(2);
 			exportButton.Name = "exportButton";
-			exportButton.Size = new Size(256, 28);
+			exportButton.Size = new Size(151, 28);
 			exportButton.TabIndex = 11;
 			exportButton.Text = "Export";
 			exportButton.UseVisualStyleBackColor = true;
@@ -159,8 +164,9 @@
 			// 
 			// sdkpathLabel
 			// 
+			sdkpathLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
 			sdkpathLabel.AutoSize = true;
-			sdkpathLabel.Location = new Point(259, 3);
+			sdkpathLabel.Location = new Point(406, 3);
 			sdkpathLabel.Margin = new Padding(2, 0, 2, 0);
 			sdkpathLabel.Name = "sdkpathLabel";
 			sdkpathLabel.RightToLeft = RightToLeft.Yes;
@@ -174,7 +180,7 @@
 			// additiveCheckbox
 			// 
 			additiveCheckbox.AutoSize = true;
-			additiveCheckbox.Location = new Point(271, 258);
+			additiveCheckbox.Location = new Point(395, 127);
 			additiveCheckbox.Margin = new Padding(2);
 			additiveCheckbox.Name = "additiveCheckbox";
 			additiveCheckbox.Size = new Size(87, 24);
@@ -185,29 +191,18 @@
 			// blendBox
 			// 
 			blendBox.AutoSize = true;
-			blendBox.Location = new Point(271, 202);
+			blendBox.Location = new Point(395, 99);
 			blendBox.Margin = new Padding(2);
 			blendBox.Name = "blendBox";
-			blendBox.Size = new Size(120, 24);
+			blendBox.Size = new Size(69, 24);
 			blendBox.TabIndex = 14;
-			blendBox.Text = "Blend Frames";
+			blendBox.Text = "Blend";
 			blendBox.UseVisualStyleBackColor = true;
-			// 
-			// coloralpha
-			// 
-			coloralpha.AutoSize = true;
-			coloralpha.Location = new Point(271, 230);
-			coloralpha.Margin = new Padding(2);
-			coloralpha.Name = "coloralpha";
-			coloralpha.Size = new Size(116, 24);
-			coloralpha.TabIndex = 15;
-			coloralpha.Text = "$color/alpha";
-			coloralpha.UseVisualStyleBackColor = true;
 			// 
 			// loopBox
 			// 
 			loopBox.AutoSize = true;
-			loopBox.Location = new Point(271, 174);
+			loopBox.Location = new Point(395, 71);
 			loopBox.Margin = new Padding(2);
 			loopBox.Name = "loopBox";
 			loopBox.Size = new Size(82, 24);
@@ -218,7 +213,7 @@
 			// keepBox
 			// 
 			keepBox.AutoSize = true;
-			keepBox.Location = new Point(271, 286);
+			keepBox.Location = new Point(168, 318);
 			keepBox.Margin = new Padding(2);
 			keepBox.Name = "keepBox";
 			keepBox.Size = new Size(99, 24);
@@ -226,15 +221,56 @@
 			keepBox.Text = "Keep MKS";
 			keepBox.UseVisualStyleBackColor = true;
 			// 
+			// previewWindow
+			// 
+			previewWindow.Location = new Point(277, 207);
+			previewWindow.Name = "previewWindow";
+			previewWindow.Size = new Size(128, 128);
+			previewWindow.TabIndex = 18;
+			previewWindow.TabStop = false;
+			previewWindow.Paint += previewWindow_Paint;
+			// 
+			// label4
+			// 
+			label4.AutoSize = true;
+			label4.Location = new Point(272, 184);
+			label4.Name = "label4";
+			label4.Size = new Size(60, 20);
+			label4.TabIndex = 19;
+			label4.Text = "Preview";
+			// 
+			// speedSlider
+			// 
+			speedSlider.Location = new Point(411, 205);
+			speedSlider.Minimum = 1;
+			speedSlider.Name = "speedSlider";
+			speedSlider.Orientation = Orientation.Vertical;
+			speedSlider.Size = new Size(56, 130);
+			speedSlider.TabIndex = 20;
+			speedSlider.Value = 5;
+			speedSlider.Scroll += speedSlider_Scroll;
+			// 
+			// speedLabel
+			// 
+			speedLabel.AutoSize = true;
+			speedLabel.Location = new Point(442, 264);
+			speedLabel.Name = "speedLabel";
+			speedLabel.Size = new Size(37, 20);
+			speedLabel.TabIndex = 21;
+			speedLabel.Text = "50%";
+			// 
 			// Form1
 			// 
 			AllowDrop = true;
 			AutoScaleMode = AutoScaleMode.None;
 			AutoSize = true;
-			ClientSize = new Size(398, 351);
+			ClientSize = new Size(486, 351);
+			Controls.Add(speedLabel);
+			Controls.Add(speedSlider);
+			Controls.Add(label4);
+			Controls.Add(previewWindow);
 			Controls.Add(keepBox);
 			Controls.Add(loopBox);
-			Controls.Add(coloralpha);
 			Controls.Add(blendBox);
 			Controls.Add(additiveCheckbox);
 			Controls.Add(sdkpathLabel);
@@ -251,12 +287,16 @@
 			Icon = (Icon)resources.GetObject("$this.Icon");
 			Margin = new Padding(2);
 			MaximizeBox = false;
+			MaximumSize = new Size(504, 398);
 			MinimizeBox = false;
+			MinimumSize = new Size(504, 398);
 			Name = "Form1";
 			SizeGripStyle = SizeGripStyle.Hide;
 			Text = "SpriteCard Edit";
 			Load += Form1_Load;
 			((System.ComponentModel.ISupportInitialize)previewImage).EndInit();
+			((System.ComponentModel.ISupportInitialize)previewWindow).EndInit();
+			((System.ComponentModel.ISupportInitialize)speedSlider).EndInit();
 			ResumeLayout(false);
 			PerformLayout();
 		}
@@ -264,7 +304,8 @@
 		#endregion
 
 		private PictureBox previewImage;
-        private TextBox targetPath;
+		private PictureBox previewWindow;
+		private TextBox targetPath;
         private Label label1;
         private TextBox sizex;
         private Label label2;
@@ -276,8 +317,11 @@
         private LinkLabel sdkpathLabel;
         private CheckBox additiveCheckbox;
         private CheckBox blendBox;
-		private CheckBox coloralpha;
 		private CheckBox loopBox;
 		private CheckBox keepBox;
+		private PictureBox pictureBox1;
+		private Label label4;
+		private TrackBar speedSlider;
+		private Label speedLabel;
 	}
 }
