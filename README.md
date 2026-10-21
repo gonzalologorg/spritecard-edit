@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/29cdb41c-05d6-462f-8db0-58ba3f1fcb71)
+https://github.com/user-attachments/assets/5a8180e7-30de-4df5-a894-38f4f6644cf7
 
 # What's this?
 
@@ -13,6 +13,5 @@ Example you can play with:
 
 # Compability
 
-As far I can see, it works fine with Counter-Strike: Source, not really sure why, but SDK 2010 doesn't work well, so I recommend you in case it doesn't work, just get CSS and use it mksheet.exe
-
+Gmod brings nowadays with it own copy of MKSheet
 Please feel free to ask your questions and/or contribuite with this software
