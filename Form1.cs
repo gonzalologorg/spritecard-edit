@@ -131,7 +131,7 @@ namespace MKSCreator
 				{
 					Bitmap newBitmap = new Bitmap(colSize, rowSize);
 					Graphics g = Graphics.FromImage(newBitmap);
-					g.DrawImage(image, new Rectangle(0, 0, NearestPowerOf2((uint)colSize), NearestPowerOf2((uint)rowSize)), new Rectangle(x * colSize, y * rowSize, colSize, rowSize), GraphicsUnit.Pixel);
+					g.DrawImage(image, new Rectangle(0, 0, colSize, rowSize), new Rectangle(x * colSize, y * rowSize, colSize, rowSize), GraphicsUnit.Pixel);
 
 					TGA tgaImage = TGA.FromBitmap(newBitmap);
 					tgaImage.Save(folder + "\\" + fileNoName + "\\" + frameId + ".tga");
@@ -158,9 +158,10 @@ namespace MKSCreator
 		void generateMKS(string folder, string basePath)
 		{
 			string filePath = folder + "\\" + basePath + "\\";
-			string content = "sequence 0";
+			string content = "";
 			if (kindseq.Checked)
 			{
+				content += "sequence 0";
 				if (loopBox.Checked)
 					content += "\nloop\n";
 
@@ -171,12 +172,9 @@ namespace MKSCreator
 			}
 			else
 			{
-				if (loopBox.Checked)
-					content += "\nloop";
-
 				for (int i = 0; i < frameCount; i++)
 				{
-					content += "\nframe .\\" + basePath + "\\" + i + ".tga" + " 1\nsequence " + i + "\nloop\n";
+					content += "\nsequence " + i + "\nframe .\\" + basePath + "\\" + i + ".tga" + " 1\nloop\n";
 				}
 			}
 
